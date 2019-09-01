@@ -1,0 +1,50 @@
+{
+    "name": "koncerto",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build:server": "npx babel src/server -s --out-dir bin/server",
+        "work:server": "npx babel src/server -s --watch --verbose --out-dir bin/server"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AnarionBe/koncerto.git"
+    },
+    "author": "AnarionBe",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/AnarionBe/koncerto/issues"
+    },
+    "homepage": "https://github.com/AnarionBe/koncerto#readme",
+    "devDependencies": {
+        "@becode/eslint-config": "^0.5.2",
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^10.0.3",
+        "babel-preset-env": "^1.7.0",
+        "eslint": "^6.3.0",
+        "eslint-plugin-prettier": "^3.1.0",
+        "eslint-plugin-react": "^7.14.3",
+        "eslint-plugin-unicorn": "^10.0.0",
+        "husky": "^3.0.4",
+        "lint-staged": "^9.2.5",
+        "prettier": "^1.18.2"
+    },
+    "lint-staged": {
+        "*.js": [
+            "npx eslint --fix --cache",
+            "git add"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npx lint-staged"
+        }
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "pg": "^7.12.1",
+        "pg-hstore": "^2.3.3",
+        "sequelize": "^5.18.0"
+    }
+}
