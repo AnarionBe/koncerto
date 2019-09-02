@@ -2,10 +2,9 @@
     "name": "koncerto",
     "version": "0.0.1",
     "description": "",
-    "main": "index.js",
     "scripts": {
-        "build:server": "npx babel src/server -s --out-dir bin/server",
-        "work:server": "npx babel src/server -s --watch --verbose --out-dir bin/server"
+        "build": "npx babel src/server -s --out-dir bin/server",
+        "work": "npx babel src/server -s --watch --verbose --out-dir bin/server"
     },
     "repository": {
         "type": "git",
