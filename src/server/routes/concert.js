@@ -104,4 +104,21 @@ router.put("/:id", multParse.single("poster"), (req, res) => {
         .catch(err => res.status(400).send(err));
 });
 
+/*
+ * URI: /api/concerts/:id
+ * METHOD: DELETE
+ * ACTION: Delete target concert
+ * PARAMS: id -> concert id
+ */
+router.delete("/:id", (req, res) => {
+    Concert.findByPk(req.params.id)
+        .then(concert => {
+            concert
+                .destroy()
+                .then(() => res.status(200).send(concert))
+                .catch(err => res.status(400).send(err));
+        })
+        .catch(err => res.status(400).send(err));
+});
+
 export default router;
