@@ -20,6 +20,18 @@ router.get("/", (_, res) => {
 });
 
 /*
+ * URI: /api/concerts/finished
+ * METHOD: GET
+ * ACTION: List all finished concerts
+ * PARAMS: none
+ */
+router.get("/finished", (_, res) => {
+    Concert.findAll({where: {date: {[Op.lt]: Date.now()}}})
+        .then(list => res.status(200).send(list))
+        .catch(err => res.status(400).send(err));
+});
+
+/*
  * URI: /api/concerts
  * METHOD: POST
  * ACTION: Add concert to database
