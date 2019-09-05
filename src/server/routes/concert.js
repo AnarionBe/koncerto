@@ -1,5 +1,6 @@
 import express from "express";
 import multer from "multer";
+import {Op} from "sequelize";
 
 import Concert from "../models/concert";
 
@@ -12,12 +13,11 @@ const multParse = multer();
  * ACTION: List all concerts of database not happened yet
  * PARAMS: none
  */
-router.get(
-    "/",
-    /* (req, res) */ () => {
-        // TODO: list concerts to come
-    },
-);
+router.get("/", (_, res) => {
+    Concert.findAll({where: {date: {[Op.gt]: Date.now()}}})
+        .then(list => res.status(200).send(list))
+        .catch(err => res.status(400).send(err));
+});
 
 /*
  * URI: /api/concerts
