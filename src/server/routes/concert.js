@@ -39,8 +39,8 @@ router.get("/finished", (_, res) => {
  */
 router.post("/", multParse.single("poster"), (req, res) => {
     const {artist, event, date, place, link, informations} = req.body;
-    const formatDate = new Date(date);
     const poster = req.file;
+    const formatDate = new Date(date);
 
     if (formatDate < Date.now()) {
         res.status(400).json({
@@ -60,6 +60,47 @@ router.post("/", multParse.single("poster"), (req, res) => {
         poster,
     })
         .then(concert => res.status(200).send(concert))
+        .catch(err => res.status(400).send(err));
+});
+
+/*
+ * URI: /api/concerts/:id
+ * METHOD: PUT
+ * ACTION: update target concert
+ * PARAMS:  params:id -> concert id
+ *          body -> concert informations
+ */
+router.put("/:id", multParse.single("poster"), (req, res) => {
+    const {artist, event, date, place, link, informations} = req.body;
+    const {id} = req.params;
+    const poster = req.file;
+    const update = {};
+
+    if (date) {
+        const formatDate = new Date(date);
+        if (formatDate < Date.now()) {
+            res.status(400).json({
+                status: "Invalid date",
+                message:
+                    "The given date must be higher than the current date !",
+            });
+        }
+        update.date = date;
+    }
+
+    Concert.findByPk(id)
+        .then(concert => {
+            artist && (update.artist = artist);
+            event && (update.event = event);
+            place && (update.place = place);
+            link && (update.link = link);
+            informations && (update.informations = informations);
+            poster && (update.poster = poster);
+            concert
+                .update(update)
+                .then(updated => res.status(200).send(updated))
+                .catch(err => res.status(400).send(err));
+        })
         .catch(err => res.status(400).send(err));
 });
 
