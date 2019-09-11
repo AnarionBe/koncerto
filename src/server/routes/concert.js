@@ -1,11 +1,13 @@
 import express from "express";
 import multer from "multer";
 import {Op} from "sequelize";
+import path from "path";
+import fs from "fs";
 
 import Concert from "../models/concert";
 
 const router = express.Router();
-const multParse = multer();
+const multParse = multer({dest: "/uploads"});
 
 /*
  * URI: /api/concerts
@@ -50,17 +52,24 @@ router.post("/", multParse.single("poster"), (req, res) => {
         return;
     }
 
-    Concert.create({
-        artist,
-        event,
-        date: formatDate,
-        place,
-        link,
-        informations,
-        poster,
-    })
-        .then(concert => res.status(200).send(concert))
-        .catch(err => res.status(400).send(err));
+    const tempPath = poster.path;
+    const targetPath = path.join(__dirname, `./uploads/${Date.now()}.png`);
+
+    if (path.extname(poster.originalname).toLowerCase() === ".png") {
+        fs.rename(tempPath, targetPath, () => {
+            Concert.create({
+                artist,
+                event,
+                date: formatDate,
+                place,
+                link,
+                informations,
+                poster: targetPath,
+            })
+                .then(concert => res.status(200).send(concert))
+                .catch(err => res.status(400).send(err));
+        });
+    }
 });
 
 /*
@@ -70,7 +79,9 @@ router.post("/", multParse.single("poster"), (req, res) => {
  * PARAMS:  params:id -> concert id
  *          body -> concert informations
  */
+// FIXME: (node:272) Warning: a promise was created in a handler at src/app/bin/server/routes/concert.js:161:17 but was not returned from it, see http://goo.gl/rRqMUw
 router.put("/:id", multParse.single("poster"), (req, res) => {
+    // ANCHOR #1
     const {artist, event, date, place, link, informations} = req.body;
     const {id} = req.params;
     const poster = req.file;
@@ -95,7 +106,19 @@ router.put("/:id", multParse.single("poster"), (req, res) => {
             place && (update.place = place);
             link && (update.link = link);
             informations && (update.informations = informations);
-            poster && (update.poster = poster);
+
+            if (poster) {
+                const tempPath = poster.path;
+                const targetPath = path.join(__dirname, concert.poster);
+
+                if (
+                    path.extname(poster.originalname).toLowerCase() === ".png"
+                ) {
+                    fs.rename(tempPath, targetPath, () => {
+                        // FIXME: no empty callback would be great
+                    });
+                }
+            }
             concert
                 .update(update)
                 .then(updated => res.status(200).send(updated))

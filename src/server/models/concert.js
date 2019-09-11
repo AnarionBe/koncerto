@@ -16,7 +16,7 @@ export default sequelize.define("concert", {
         allowNull: false,
     },
     poster: {
-        type: Sequelize.DataTypes.JSONB,
+        type: Sequelize.DataTypes.STRING,
         allowNull: true,
     },
     place: {
