@@ -52,24 +52,34 @@ router.post("/", multParse.single("poster"), (req, res) => {
         return;
     }
 
-    const tempPath = poster.path;
-    const targetPath = path.join(__dirname, `./uploads/${Date.now()}.png`);
+    let targetPath = ""; // TODO: put a default image path
 
-    if (path.extname(poster.originalname).toLowerCase() === ".png") {
-        fs.rename(tempPath, targetPath, () => {
-            Concert.create({
-                artist,
-                event,
-                date: formatDate,
-                place,
-                link,
-                informations,
-                poster: targetPath,
-            })
-                .then(concert => res.status(200).send(concert))
-                .catch(err => res.status(400).send(err));
+    if (poster) {
+        const fileName = `${Date.now()}.png`;
+        targetPath = path.join(__dirname, `../../uploads/${fileName}`);
+        fs.readFile(poster.path, (err, data) => {
+            if (err) {
+                res.status(400).json({
+                    status: "Can't read image",
+                    message: "The given image can't be readed !",
+                });
+                return;
+            }
+            fs.writeFileSync(targetPath, data);
         });
     }
+
+    Concert.create({
+        artist,
+        event,
+        date: formatDate,
+        place,
+        link,
+        informations,
+        poster: targetPath,
+    })
+        .then(concert => res.status(200).send(concert))
+        .catch(err => res.status(400).send(err));
 });
 
 /*
@@ -79,9 +89,8 @@ router.post("/", multParse.single("poster"), (req, res) => {
  * PARAMS:  params:id -> concert id
  *          body -> concert informations
  */
-// FIXME: (node:272) Warning: a promise was created in a handler at src/app/bin/server/routes/concert.js:161:17 but was not returned from it, see http://goo.gl/rRqMUw
+// FIXME: (node:477) Warning: a promise was created in a handler at src/app/bin/server/routes/concert.js:183:17 but was not returned from it, see http://goo.gl/rRqMUw
 router.put("/:id", multParse.single("poster"), (req, res) => {
-    // ANCHOR #1
     const {artist, event, date, place, link, informations} = req.body;
     const {id} = req.params;
     const poster = req.file;
@@ -108,14 +117,28 @@ router.put("/:id", multParse.single("poster"), (req, res) => {
             informations && (update.informations = informations);
 
             if (poster) {
-                const tempPath = poster.path;
-                const targetPath = path.join(__dirname, concert.poster);
-
-                if (
-                    path.extname(poster.originalname).toLowerCase() === ".png"
-                ) {
-                    fs.rename(tempPath, targetPath, () => {
-                        // FIXME: no empty callback would be great
+                if (concert.poster === "/src/app/bin/uploads/default.png") {
+                    const fileName = `${Date.now()}.png`;
+                    const targetPath = path.join(
+                        __dirname,
+                        `../../uploads/${fileName}`,
+                    );
+                    fs.readFile(poster.path, (err, data) => {
+                        if (err) {
+                            res.status(400).json({
+                                status: "Can't read image",
+                                message: "The given image can't be readed !",
+                            });
+                            return;
+                        }
+                        fs.writeFileSync(targetPath, data);
+                        update.poster = targetPath;
+                    });
+                } else {
+                    fs.readFile(poster.path, (err, data) => {
+                        if (!err) {
+                            fs.writeFileSync(concert.poster, data);
+                        }
                     });
                 }
             }
@@ -142,6 +165,16 @@ router.delete("/:id", (req, res) => {
                 .catch(err => res.status(400).send(err));
         })
         .catch(err => res.status(400).send(err));
+});
+
+/*
+ * URI: /api/concerts/poster/:path
+ * METHOD: GET
+ * ACTION: Get the concert poster
+ * PARAMS: query.poster -> path to the poster
+ */
+router.get("/poster", (req, res) => {
+    res.status(200).sendFile(req.query.poster);
 });
 
 export default router;
