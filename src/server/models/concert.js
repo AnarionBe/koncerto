@@ -15,13 +15,17 @@ export default sequelize.define("concert", {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
     },
+    hour: {
+        type: Sequelize.DataTypes.TIME,
+        allowNull: false,
+    },
     poster: {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,
     },
     place: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true, // TODO: set to false when add artist implemented
     },
     link: {
         type: Sequelize.DataTypes.STRING,

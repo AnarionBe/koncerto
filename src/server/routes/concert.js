@@ -40,7 +40,7 @@ router.get("/finished", (_, res) => {
  * PARAMS: Concert informations
  */
 router.post("/", multParse.single("poster"), (req, res) => {
-    const {artist, event, date, place, link, informations} = req.body;
+    const {artist, event, date, hour, place, link, informations} = req.body;
     const poster = req.file;
     const formatDate = new Date(date);
 
@@ -73,6 +73,7 @@ router.post("/", multParse.single("poster"), (req, res) => {
         artist,
         event,
         date: formatDate,
+        hour,
         place,
         link,
         informations,
@@ -91,7 +92,7 @@ router.post("/", multParse.single("poster"), (req, res) => {
  */
 // FIXME: (node:477) Warning: a promise was created in a handler at src/app/bin/server/routes/concert.js:183:17 but was not returned from it, see http://goo.gl/rRqMUw
 router.put("/:id", multParse.single("poster"), (req, res) => {
-    const {artist, event, date, place, link, informations} = req.body;
+    const {artist, event, date, hour, place, link, informations} = req.body;
     const {id} = req.params;
     const poster = req.file;
     const update = {};
@@ -110,6 +111,7 @@ router.put("/:id", multParse.single("poster"), (req, res) => {
 
     Concert.findByPk(id)
         .then(concert => {
+            hour && (update.hour = hour);
             artist && (update.artist = artist);
             event && (update.event = event);
             place && (update.place = place);
