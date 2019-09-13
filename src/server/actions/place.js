@@ -2,11 +2,11 @@ import {Op} from "sequelize";
 import Place from "../models/place";
 
 export const addPlace = (req, res) => {
-    const {name, road, number, city, zipcode, link} = req.body;
+    const {name, street, number, city, zipcode, link} = req.body;
 
     Place.create({
         name,
-        road,
+        street,
         number,
         city,
         zipcode,

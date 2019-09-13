@@ -7,7 +7,7 @@ export default sequelize.define("place", {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },
-    road: {
+    street: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },
