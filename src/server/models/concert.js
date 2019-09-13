@@ -1,7 +1,8 @@
 import Sequelize from "sequelize";
 import Place from "./place";
+import db from "../utils/database";
 
-const sequelize = new Sequelize("postgres://dev:dev@postgres:5432/postgres");
+const sequelize = db.connect();
 
 const Concert = sequelize.define("concert", {
     date: {

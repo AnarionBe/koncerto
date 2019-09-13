@@ -1,6 +1,7 @@
 import Sequelize from "sequelize";
+import db from "../utils/database";
 
-const sequelize = new Sequelize("postgres://dev:dev@postgres:5432/postgres");
+const sequelize = db.connect();
 
 export default sequelize.define("place", {
     name: {

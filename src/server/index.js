@@ -1,20 +1,13 @@
 import express from "express";
-import Sequelize from "sequelize";
-import Concert from "./models/concert";
-import Place from "./models/place";
 import concertsRoutes from "./routes/concert";
 import placesRoutes from "./routes/place";
+import db from "./utils/database";
 
 const app = express();
 
-const sequelize = new Sequelize("postgres://dev:dev@postgres:5432/postgres");
-sequelize
-    .authenticate()
-    .then(() => console.log("Connection to DB ok !"))
-    .catch(err => console.log("Error: ", err));
-
-Place.sync();
-Concert.sync();
+const sequelize = db.connect();
+db.auth(sequelize);
+db.sync();
 
 app.use("/api/concerts", concertsRoutes);
 app.use("/api/places", placesRoutes);

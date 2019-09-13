@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/AnarionBe/koncerto#readme",
     "devDependencies": {
+        "@babel/polyfill": "^7.6.0",
         "@becode/eslint-config": "^0.5.2",
         "babel-cli": "^6.26.0",
         "babel-eslint": "^10.0.3",
