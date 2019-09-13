@@ -12,23 +12,24 @@ const multParse = multer({dest: "/uploads"});
 /*
  * URI: /api/concerts
  * METHOD: GET
- * ACTION: List all concerts of database not happened yet
- * PARAMS: none
+ * ACTION: List concerts
+ * PARAMS: query -> filters
  */
-router.get("/", (_, res) => {
-    Concert.findAll({where: {date: {[Op.gt]: Date.now()}}})
-        .then(list => res.status(200).send(list))
-        .catch(err => res.status(400).send(err));
-});
+router.get("/", (req, res) => {
+    const {artist, event, date, hour, place, showFinished} = req.query;
+    const clause = {where: {}};
+    const formatDate = new Date(date);
 
-/*
- * URI: /api/concerts/finished
- * METHOD: GET
- * ACTION: List all finished concerts
- * PARAMS: none
- */
-router.get("/finished", (_, res) => {
-    Concert.findAll({where: {date: {[Op.lt]: Date.now()}}})
+    artist && (clause.where.artist = artist);
+    event && (clause.where.event = event);
+    date && (clause.where.date = formatDate);
+    hour && (clause.where.hour = hour);
+    place && (clause.where.place = place);
+    if (!showFinished && !date) {
+        clause.where.date = {[Op.gt]: Date.now()};
+    }
+
+    Concert.findAll(clause)
         .then(list => res.status(200).send(list))
         .catch(err => res.status(400).send(err));
 });
