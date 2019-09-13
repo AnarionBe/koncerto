@@ -3,6 +3,7 @@ import Sequelize from "sequelize";
 import Concert from "./models/concert";
 import Place from "./models/place";
 import concertsRoutes from "./routes/concert";
+import placesRoutes from "./routes/place";
 
 const app = express();
 
@@ -16,6 +17,7 @@ Place.sync();
 Concert.sync();
 
 app.use("/api/concerts", concertsRoutes);
+app.use("/api/places", placesRoutes);
 
 app.get("/", () => console.log("home sweet home"));
 
