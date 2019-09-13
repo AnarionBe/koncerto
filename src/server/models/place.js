@@ -28,4 +28,8 @@ export default sequelize.define("place", {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,
     },
+    informations: {
+        type: Sequelize.DataTypes.TEXT,
+        allowNull: true,
+    },
 });
