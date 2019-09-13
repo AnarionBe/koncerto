@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import {addPlace, getPlaces} from "../actions/place";
+import {addPlace, getPlaces, updatePlace} from "../actions/place";
 
 const router = express.Router();
 const multParse = multer();
@@ -20,5 +20,14 @@ router.post("/", multParse.none(), addPlace);
  * PARAMS: query -> filters
  */
 router.get("/", getPlaces);
+
+/*
+ * URI: /api/places/:id
+ * METHOD: PUT
+ * ACTION: Update target place
+ * PARAMS:  id -> place id
+ *          body -> place informations
+ */
+router.put("/:id", multParse.none(), updatePlace);
 
 export default router;

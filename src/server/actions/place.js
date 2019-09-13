@@ -28,3 +28,25 @@ export const getPlaces = (req, res) => {
         .then(list => res.status(200).send(list))
         .catch(err => res.status(400).send(err));
 };
+
+export const updatePlace = (req, res) => {
+    const {name, street, number, city, zipcode, link} = req.body;
+    const {id} = req.params;
+    const update = {};
+
+    Place.findByPk(id)
+        .then(place => {
+            name && (update.name = name);
+            street && (update.street = street);
+            number && (update.number = number);
+            city && (update.city = city);
+            zipcode && (update.zipcode = zipcode);
+            link && (update.link = link);
+
+            place
+                .update(update)
+                .then(updated => res.status(200).send(updated))
+                .catch(err => res.status(400).send(err));
+        })
+        .catch(err => res.status(400).send(err));
+};

@@ -30,8 +30,8 @@ router.post("/", multParse.single("poster"), addConcert);
 /*
  * URI: /api/concerts/:id
  * METHOD: PUT
- * ACTION: update target concert
- * PARAMS:  params:id -> concert id
+ * ACTION: Update target concert
+ * PARAMS:  id -> concert id
  *          body -> concert informations
  */
 router.put("/:id", multParse.single("poster"), updateConcert);
