@@ -1,6 +1,7 @@
 import express from "express";
 import Sequelize from "sequelize";
 import Concert from "./models/concert";
+import Place from "./models/place";
 import concertsRoutes from "./routes/concert";
 
 const app = express();
@@ -11,6 +12,7 @@ sequelize
     .then(() => console.log("Connection to DB ok !"))
     .catch(err => console.log("Error: ", err));
 
+Place.sync();
 Concert.sync();
 
 app.use("/api/concerts", concertsRoutes);

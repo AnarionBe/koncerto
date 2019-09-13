@@ -57,7 +57,7 @@ export const addConcert = (req, res) => {
         event,
         date: formatDate,
         hour,
-        place,
+        placeId: place,
         link,
         informations,
         poster: targetPath,
