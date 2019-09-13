@@ -5,14 +5,17 @@ import Concert from "../models/concert";
 
 export const listConcerts = (req, res) => {
     const {artist, event, date, hour, place, showFinished} = req.query;
-    const clause = {where: {}};
+    const clause = {
+        include: ["place"],
+        where: {},
+    };
     const formatDate = new Date(date);
 
     artist && (clause.where.artist = artist);
     event && (clause.where.event = event);
     date && (clause.where.date = formatDate);
     hour && (clause.where.hour = hour);
-    place && (clause.where.place = place);
+    place && (clause.where.placeId = place);
     if (!showFinished && !date) {
         clause.where.date = {[Op.gt]: Date.now()};
     }
