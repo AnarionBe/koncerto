@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 import Place from "./place";
+import Artist from "./artist";
 import db from "../utils/database";
 
 const sequelize = db.connect();
@@ -28,5 +29,6 @@ const Concert = sequelize.define("concert", {
 });
 
 Concert.belongsTo(Place);
+Concert.belongsTo(Artist);
 
 export default Concert;

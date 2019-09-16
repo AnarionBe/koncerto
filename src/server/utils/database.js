@@ -1,7 +1,8 @@
-import Place from "../models/place";
-import Concert from "../models/concert";
 import "@babel/polyfill";
 import Sequelize from "sequelize";
+import Artist from "../models/artist";
+import Place from "../models/place";
+import Concert from "../models/concert";
 
 export default {
     connect() {
@@ -13,6 +14,7 @@ export default {
             .catch(err => console.log("Error: ", err));
     },
     async sync() {
+        await Artist.sync();
         await Place.sync();
         await Concert.sync();
     },
