@@ -1,6 +1,7 @@
 import express from "express";
 import concertsRoutes from "./routes/concert";
 import placesRoutes from "./routes/place";
+import artistsRoutes from "./routes/artist";
 import db from "./utils/database";
 
 const app = express();
@@ -11,6 +12,7 @@ db.sync();
 
 app.use("/api/concerts", concertsRoutes);
 app.use("/api/places", placesRoutes);
+app.use("/api/routes", artistsRoutes);
 
 app.get("/", () => console.log("home sweet home"));
 

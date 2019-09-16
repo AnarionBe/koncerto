@@ -45,7 +45,7 @@ router.put("/:id", multParse.single("poster"), updateConcert);
 router.delete("/:id", deleteConcert);
 
 /*
- * URI: /api/concerts/poster/:path
+ * URI: /api/concerts/poster
  * METHOD: GET
  * ACTION: Get the concert poster
  * PARAMS: query.poster -> path to the poster

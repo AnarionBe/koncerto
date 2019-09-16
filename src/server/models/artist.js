@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 // import db from "../utils/database";
 
-//FIXME: const sequelize = db.connect();
+// FIXME: const sequelize = db.connect();
 const sequelize = new Sequelize("postgres://dev:dev@postgres:5432/postgres");
 
 const Artist = sequelize.define("artist", {
