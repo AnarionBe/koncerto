@@ -6,13 +6,13 @@ import Concert from "../models/concert";
 export const listConcerts = (req, res) => {
     const {artist, event, date, hour, place, showFinished} = req.query;
     const clause = {
-        include: ["place"],
+        include: ["place", "artist"],
         where: {},
     };
     const formatDate = new Date(date);
 
-    artist && (clause.where.artist = artist);
-    event && (clause.where.event = event);
+    artist && (clause.where.artistId = artist);
+    event && (clause.where.eventId = event);
     date && (clause.where.date = formatDate);
     hour && (clause.where.hour = hour);
     place && (clause.where.placeId = place);
@@ -91,9 +91,9 @@ export const updateConcert = (req, res) => {
     Concert.findByPk(id)
         .then(concert => {
             hour && (update.hour = hour);
-            artist && (update.artist = artist);
-            event && (update.event = event);
-            place && (update.place = place);
+            artist && (update.artistId = artist);
+            event && (update.eventId = event);
+            place && (update.placeId = place);
             link && (update.link = link);
             informations && (update.informations = informations);
 
